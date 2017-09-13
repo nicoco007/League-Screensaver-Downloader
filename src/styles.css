@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+@font-face {
+  font-family: 'Beaufort for LOL';
+  font-weight: normal;
+  src: url('assets/fonts/BeaufortforLOL-Regular.woff');
+}
+
+@font-face {
+  font-family: 'Beaufort for LOL';
+  font-weight: 500;
+  src: url('assets/fonts/BeaufortforLOL-Medium.woff');
+}
+
+@font-face {
+  font-family: 'Beaufort for LOL';
+  font-weight: bold;
+  src: url('assets/fonts/BeaufortforLOL-Bold.woff');
+}
+
+* {
+  font-family: 'Beaufort for LOL', serif;
+  font-weight: normal;
+}
+
+::-webkit-scrollbar {
+  width: 12px
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.3)
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-color: rgba(147, 115, 65, 0.8);
+  background-clip: content-box
+}
+
+body {
+  background-color: #131315;
+  color: #C4B998;
+  font-family: Beaufort, serif;
+  text-transform: uppercase;
+  letter-spacing: 2px
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: 5px
+}
+
+a {
+  color: #AF9255
+}
+
+a:hover, a:focus {
+  color: #C4B998;
+  text-decoration: none
+}

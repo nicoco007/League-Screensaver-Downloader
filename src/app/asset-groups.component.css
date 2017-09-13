@@ -1,0 +1,22 @@
+.asset-group-types, .asset-groups {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.asset-group-types {
+  padding: 50px;
+}
+
+.asset-group {
+  margin: 13px;
+}
+
+.asset-group img {
+  transition: 200ms all;
+}
+
+.asset-group:hover img {
+  transition: 200ms all;
+  filter: sepia(100%) grayscale(50%);
+}
