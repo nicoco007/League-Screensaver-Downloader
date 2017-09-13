@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 
 import {DataService} from './data.service';
 
 @Component({
   selector: 'app-asset-groups',
   templateUrl: './asset-groups.component.html',
-  styleUrls: ['./asset-groups.component.css']
+  styleUrls: ['./asset-groups.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AssetGroupsComponent implements OnInit {
   constructor(public dataService: DataService) {}

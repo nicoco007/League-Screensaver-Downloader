@@ -1,0 +1,36 @@
+.container {
+  padding: 50px;
+}
+
+.nav-pills {
+  .nav-link {
+    color: #AF9255;
+
+    &:hover, &:focus, &:active, &.active {
+      color: #C4B998;
+      text-decoration: none;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+}
+
+.asset-group-types .nav-pills {
+  padding: 25px 0;
+  border: 1px solid #413B30;
+}
+
+.asset-group {
+  margin: 13px;
+
+  img {
+    transition: 200ms all;
+  }
+
+  &:hover {
+    img {
+      transition: 200ms all;
+      filter: grayscale(100%);
+    }
+  }
+}

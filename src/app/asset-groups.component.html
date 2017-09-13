@@ -1,18 +1,17 @@
-<div *ngIf="data">
-  <ul class="nav justify-content-center" role="tablist">
-    <li class="nav-item" *ngFor="let type of data['assetGroupTypes']; let first = first">
-      <a class="nav-link" href="#{{type['id']}}" [class.active]="first" role="tab" data-toggle="tab">{{type['id']}}</a>
-    </li>
-  </ul>
-  <div class="asset-group-types tab-content">
-    <div *ngFor="let type of data['assetGroupTypes']; let first = first" id="{{type['id']}}" class="asset-group-type tab-pane fade in" role="tabpanel" [class.active]="first">
-      <h1 class="text-center">{{dataService.translate([type['nameTranslateId']])}}</h1>
-      <ul class="asset-groups d-flex justify-content-center flex-wrap">
-        <li class="asset-group" *ngFor="let group of data['assetGroups'] | tagfilter: type['id'] | translationsort">
-          <img src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}"><br/>
-          <div class="text-center">{{dataService.translate([group['nameTranslateId']])}}</div>
-        </li>
-      </ul>
-    </div>
+<div class="container">
+  <div *ngIf="data">
+    <ngb-tabset type="pills" justify="center" class="asset-group-types">
+      <ngb-tab *ngFor="let type of data['assetGroupTypes']" title="{{type['id']}}">
+        <ng-template ngbTabContent>
+          <h1 class="text-center">{{dataService.translate([type['nameTranslateId']])}}</h1>
+          <div class="asset-groups d-flex flex-row flex-wrap justify-content-center">
+            <div class="asset-group" *ngFor="let group of data['assetGroups'] | tagfilter: type['id'] | translationsort">
+              <img src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}"><br/>
+              <span class="text-center">{{dataService.translate([group['nameTranslateId']])}}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
   </div>
 </div>

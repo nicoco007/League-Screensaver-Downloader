@@ -16,14 +16,14 @@ export class TranslationSortPipe implements PipeTransform {
     console.log(args);
 
     return value.sort((a, b) => {
-      const str1 = this.dataService.translate(a['nameTranslateId']);
-      const str2 = this.dataService.translate(b['nameTranslateId']);
+      const strA = this.dataService.translate(a['nameTranslateId']);
+      const strB = this.dataService.translate(b['nameTranslateId']);
 
-      if (!str1 || !str2) {
+      if (!strA || !strB) {
         return 0;
       }
 
-      return str1.localeCompare(str2);
+      return strA.localeCompare(strB);
     });
   }
 }
