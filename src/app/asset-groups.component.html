@@ -1,11 +1,11 @@
 <div *ngIf="data">
-  <ul class="nav justify-content-center">
-    <li class="nav-item" *ngFor="let type of data['assetGroupTypes']">
-      <a class="nav-link" href="#">{{type['id']}}</a>
+  <ul class="nav justify-content-center" role="tablist">
+    <li class="nav-item" *ngFor="let type of data['assetGroupTypes']; let first = first">
+      <a class="nav-link" href="#{{type['id']}}" [class.active]="first" role="tab" data-toggle="tab">{{type['id']}}</a>
     </li>
   </ul>
-  <ul class="asset-group-types">
-    <li class="asset-group-type" *ngFor="let type of data['assetGroupTypes']">
+  <div class="asset-group-types tab-content">
+    <div *ngFor="let type of data['assetGroupTypes']; let first = first" id="{{type['id']}}" class="asset-group-type tab-pane fade in" role="tabpanel" [class.active]="first">
       <h1 class="text-center">{{dataService.translate([type['nameTranslateId']])}}</h1>
       <ul class="asset-groups d-flex justify-content-center flex-wrap">
         <li class="asset-group" *ngFor="let group of data['assetGroups'] | tagfilter: type['id'] | translationsort">
@@ -13,6 +13,6 @@
           <div class="text-center">{{dataService.translate([group['nameTranslateId']])}}</div>
         </li>
       </ul>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>

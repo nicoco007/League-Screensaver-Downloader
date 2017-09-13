@@ -13,6 +13,8 @@ export class AssetGroupsComponent implements OnInit {
   data: Object;
 
   ngOnInit(): void {
-    this.dataService.loadData().then(data => this.data = data);
+    this.dataService.loadData().then(data => {
+      this.data = data;
+    });
   }
 }
