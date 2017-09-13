@@ -10,8 +10,6 @@ export class TagFilterPipe implements PipeTransform {
       return args;
     }
 
-    console.log(args);
-
     return value.filter(item => item['tags'].indexOf(args[0]) !== -1);
   }
 }

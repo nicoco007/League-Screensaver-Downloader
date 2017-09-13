@@ -8,6 +8,9 @@ import {AppRoutingModule} from './app-routing.module';
 
 import {TagFilterPipe} from './tag-filter.pipe';
 
+import {DataService} from './data.service';
+import {TranslationSortPipe} from './translation-sort.pipe';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -17,9 +20,10 @@ import {TagFilterPipe} from './tag-filter.pipe';
   declarations: [
     AppComponent,
     AssetGroupsComponent,
-    TagFilterPipe
+    TagFilterPipe,
+    TranslationSortPipe
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
