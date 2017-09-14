@@ -1,17 +1,40 @@
-<div class="container">
+<div class="app-container">
   <div *ngIf="data">
-    <ngb-tabset type="pills" justify="center" class="asset-group-types">
-      <ngb-tab *ngFor="let type of data['assetGroupTypes']" title="{{type['id']}}">
-        <ng-template ngbTabContent>
-          <h1 class="text-center">{{dataService.translate([type['nameTranslateId']])}}</h1>
-          <div class="asset-groups d-flex flex-row flex-wrap justify-content-center">
-            <div class="asset-group" *ngFor="let group of data['assetGroups'] | tagfilter: type['id'] | translationsort">
-              <img src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}"><br/>
-              <span class="text-center">{{dataService.translate([group['nameTranslateId']])}}</span>
+    <div class="main-navigation">
+      <div class="nav-button">Hello</div>
+      <div class="nav-container">
+        <ul class="nav nav-pills asset-group-types justify-content-center">
+          <li *ngFor="let groupType of data['assetGroupTypes']; let first = first" class="nav-item">
+            <a class="nav-link" [class.active]="activeId ? groupType['id'] === activeId : first" href (click)="!!select(groupType['id'])">{{dataService.translate(groupType['nameTranslateId'])}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-button">Hello</div>
+    </div>
+    <div class="tab-content asset-group-type-container">
+      <div *ngFor="let groupType of data['assetGroupTypes']; let first = first" class="tab-pane asset-group-type active" [@paneState]="(activeId ? groupType['id'] === activeId : first) ? 'active' : 'inactive'" role="tabpanel">
+        <div class="asset-group-container d-flex justify-content-center flex-wrap">
+          <div *ngFor="let group of data['assetGroups'] | tagfilter: groupType['id'] | translationsort" class="asset-group">
+            <img src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}"><br/>
+            <div class="footer">
+              <div class="inner">
+                 {{dataService.translate([group['nameTranslateId']])}}
+              </div>
+            </div>
+            <div class="overlay">
+              <div class="inner">
+                {{dataService.translate([group['nameTranslateId']])}}
+              </div>
+              <div class="footer">
+                <div class="inner">
+                  View All<br/>
+                  ({{(data['assets'] | tagfilter: group['id']).length}})
+                </div>
+              </div>
             </div>
           </div>
-        </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

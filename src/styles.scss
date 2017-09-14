@@ -16,17 +16,14 @@
   src: url('assets/fonts/BeaufortforLOL-Bold.woff');
 }
 
-* {
-  font-family: 'Beaufort for LOL', serif;
-  font-weight: normal;
-}
-
 ::-webkit-scrollbar {
   width: 12px
 }
+
 ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.3)
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 6px;
   border: 3px solid transparent;
@@ -36,8 +33,10 @@
 
 body {
   background-color: #131315;
-  color: #C4B998;
-  font-family: Beaufort, serif;
+  color: #b59758;
+  font-family: 'Beaufort for LOL', serif;
+  font-weight: normal;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 2px
 }

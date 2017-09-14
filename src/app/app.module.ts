@@ -1,12 +1,12 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppComponent} from './app.component';
 import {AssetGroupsComponent} from './asset-groups.component';
-// import {AppRoutingModule} from './app-routing.module';
 
 import {TagFilterPipe} from './tag-filter.pipe';
 
@@ -15,8 +15,8 @@ import {TranslationSortPipe} from './translation-sort.pipe';
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
-    // AppRoutingModule,
     HttpModule,
     NgbModule.forRoot()
   ],
