@@ -3,9 +3,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install'
+        sh 'npm install -d'
         sh 'ng build --prod'
-        archiveArtifacts 'dist'
+        archiveArtifacts 'dist/*'
+        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true)
       }
     }
   }
