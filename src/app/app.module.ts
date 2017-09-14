@@ -8,9 +8,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppComponent} from './app.component';
 import {AssetGroupsComponent} from './asset-groups.component';
 
-import {TagFilterPipe} from './tag-filter.pipe';
-
 import {DataService} from './data.service';
+
+import {TagFilterPipe} from './tag-filter.pipe';
+import {IdFilterPipe} from './id-filter.pipe';
 import {TranslationSortPipe} from './translation-sort.pipe';
 
 @NgModule({
@@ -24,6 +25,7 @@ import {TranslationSortPipe} from './translation-sort.pipe';
     AppComponent,
     AssetGroupsComponent,
     TagFilterPipe,
+    IdFilterPipe,
     TranslationSortPipe
   ],
   providers: [DataService],

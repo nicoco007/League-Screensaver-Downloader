@@ -14,20 +14,40 @@
     <div class="tab-content asset-group-type-container">
       <div *ngFor="let groupType of data['assetGroupTypes']; let first = first" class="tab-pane asset-group-type active" [@paneState]="(activeId ? groupType['id'] === activeId : first) ? 'active' : 'inactive'" role="tabpanel">
         <div class="asset-group-container d-flex justify-content-center flex-wrap">
-          <div *ngFor="let group of data['assetGroups'] | tagfilter: groupType['id'] | translationsort" class="asset-group">
-            <img src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}"><br/>
+          <div *ngFor="let group of data['assetGroups'] | tagfilter: groupType['id'] | translationsort; let i = index" class="asset-group" (click)="open(modal, group)">
+            <img class="background" src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}">
             <div class="footer">
-              <div class="inner">
-                 {{dataService.translate([group['nameTranslateId']])}}
-              </div>
+              <div class="inner">{{dataService.translate([group['nameTranslateId']])}}</div>
             </div>
             <div class="overlay">
-              <div class="inner">
-                {{dataService.translate([group['nameTranslateId']])}}
-              </div>
+              <div class="inner">{{dataService.translate([group['nameTranslateId']])}}</div>
               <div class="footer">
-                <div class="inner">
-                  View All<br/>({{group['assets'].length}})
+                <div class="inner">View All<br/>({{group['assets'].length}})</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div #modal class="modal slide-bottom full-screen">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismiss(modal)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-title-container">
+              <h1 class="modal-title"></h1>
+            </div>
+            <div *ngIf="assets">
+              <div class="assets-container d-flex justify-content-center flex-wrap">
+                <div *ngFor="let asset of assets;">
+                  <div class="asset">
+                    <img class="background" *ngIf="asset['thumbnailUrl']" src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailUrl']}}"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -37,21 +57,3 @@
     </div>
   </div>
 </div>
-
-<!-- modal -->
-<ng-template #modal let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title">Modal title</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>One fine body&hellip;</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-light" (click)="c('Close click')">Close</button>
-  </div>
-</ng-template>
-
-<!-- <button class="btn btn-lg btn-outline-primary" (click)="open(modal)">Launch demo modal</button> -->

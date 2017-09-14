@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {trigger, state, style, animate, transition, query} from '@angular/animations';
 
 import {DataService} from './data.service';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AppComponent} from './app.component';
 
 @Component({
   selector: 'app-asset-groups',
@@ -25,11 +25,14 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
   ]
 })
 export class AssetGroupsComponent implements OnInit {
-  constructor(public dataService: DataService, private modalService: NgbModal) {}
+  constructor(private appComponent: AppComponent, public dataService: DataService) {}
 
   data: Object;
   activeId: string;
   closeResult: string;
+  display = 'none';
+  show = false;
+  assets: Object[];
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
@@ -42,21 +45,18 @@ export class AssetGroupsComponent implements OnInit {
     this.activeId = tabId;
   }
 
-  open(content) {
-    this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  open(modal, group) {
+    this.assets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1);
+    this.appComponent.cssClass = 'modal-open';
+    modal.classList.add('d-block');
+    setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  dismiss(modal) {
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.classList.remove('d-block');
+      this.appComponent.cssClass = '';
+    }, 500); // force this to happen after display=block
   }
 }

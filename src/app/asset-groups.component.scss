@@ -49,7 +49,7 @@
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
 
-  img {
+  .background {
     transition: 200ms all;
   }
 
@@ -112,7 +112,7 @@
   }
 
   &:hover {
-    img {
+    .background {
       transition: 200ms all;
       filter: grayscale(100%);
     }
@@ -126,5 +126,13 @@
       transition: 200ms all;
       opacity: 1;
     }
+  }
+}
+
+.assets-container {
+  margin: 70px 15px 0 15px;
+
+  .asset {
+    margin: 13px;
   }
 }
