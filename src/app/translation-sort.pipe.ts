@@ -13,8 +13,6 @@ export class TranslationSortPipe implements PipeTransform {
       return args;
     }
 
-    console.log(args);
-
     return value.sort((a, b) => {
       const strA = this.dataService.translate(a['nameTranslateId']);
       const strB = this.dataService.translate(b['nameTranslateId']);

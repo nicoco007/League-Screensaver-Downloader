@@ -2,6 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {trigger, state, style, animate, transition, query} from '@angular/animations';
 
 import {DataService} from './data.service';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-asset-groups',
@@ -24,10 +25,11 @@ import {DataService} from './data.service';
   ]
 })
 export class AssetGroupsComponent implements OnInit {
-  constructor(public dataService: DataService) {}
+  constructor(public dataService: DataService, private modalService: NgbModal) {}
 
   data: Object;
   activeId: string;
+  closeResult: string;
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
@@ -38,5 +40,23 @@ export class AssetGroupsComponent implements OnInit {
   select(tabId): void {
     console.log(tabId);
     this.activeId = tabId;
+  }
+
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }
