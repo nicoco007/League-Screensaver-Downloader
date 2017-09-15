@@ -12,8 +12,6 @@ import {AppComponent} from './app.component';
 export class AssetGroupsComponent implements OnInit {
   constructor(private appComponent: AppComponent, public dataService: DataService) {}
 
-  @ViewChild('centerContainer') container: ElementRef;
-
   data: Object;
   selectedGroupType: Object;
   show = false;
