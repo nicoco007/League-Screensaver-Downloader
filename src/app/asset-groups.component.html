@@ -46,15 +46,17 @@
                     <source src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailVideoUrl']}}" type="video/mp4">
                   </video>
                 </div>
-                <div class="overlay d-flex justify-content-center">
-                  <a class="download align-self-center" href="http://content.nicoco007.com/lolwd/serve.php?asset={{asset['videoUrl'] ? asset['videoUrl'] : asset['url']}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
-                      <g id="surface">
-                        <path style="" d="M 15 4 L 15 20.5625 L 9.71875 15.28125 L 8.28125 16.71875 L 15.28125 23.71875 L 16 24.40625 L 16.71875 23.71875 L 23.71875 16.71875 L 22.28125 15.28125 L 17 20.5625 L 17 4 Z M 7 26 L 7 28 L 25 28 L 25 26 Z"></path>
-                      </g>
-                    </svg>
-                    <br/>
-                    Download
+                <div class="overlay">
+                  <a class="download d-flex justify-content-center" href="http://content.nicoco007.com/lolwd/serve.php?asset={{asset['videoUrl'] ? asset['videoUrl'] : asset['url']}}">
+                    <span class="inner align-self-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
+                        <g id="surface">
+                          <path style="" d="M 15 4 L 15 20.5625 L 9.71875 15.28125 L 8.28125 16.71875 L 15.28125 23.71875 L 16 24.40625 L 16.71875 23.71875 L 23.71875 16.71875 L 22.28125 15.28125 L 17 20.5625 L 17 4 Z M 7 26 L 7 28 L 25 28 L 25 26 Z"></path>
+                        </g>
+                      </svg>
+                      <br/>
+                      Download<br/>{{humanReadableFileSize(asset['size'])}}
+                    </span>
                   </a>
                 </div>
               </div>

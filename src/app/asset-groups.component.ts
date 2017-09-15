@@ -46,7 +46,7 @@ export class AssetGroupsComponent implements OnInit {
     this.activeId = tabId;
   }
 
-  open(modal, group) {
+  open(modal, group): void {
     this.group = group;
     this.assets = [];
 
@@ -59,15 +59,28 @@ export class AssetGroupsComponent implements OnInit {
     setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
   }
 
-  getAsset(assetId) {
+  getAsset(assetId): Object {
     return this.data['assets'].filter(asset => asset['id'] === assetId)[0];
   }
 
-  dismiss(modal) {
+  dismiss(modal): void {
     modal.classList.remove('show');
     setTimeout(() => {
       modal.classList.remove('d-block');
       this.appComponent.cssClass = '';
     }, 500); // force this to happen after display=block
+  }
+
+  // noinspection JSMethodCanBeStatic
+  humanReadableFileSize(size: number): string {
+    const byteUnits = [' B', ' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+    let i = 0;
+
+    while (size > 1024) {
+      size = size / 1024;
+      i++;
+    }
+
+    return Math.max(size, 0.1).toFixed(1) + byteUnits[i];
   }
 }
