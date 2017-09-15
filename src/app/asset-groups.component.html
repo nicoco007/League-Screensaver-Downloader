@@ -7,11 +7,11 @@
     </ul>
   </div>
   <div class="asset-group-type-container">
-    <div class="nav">
-      <div class="left">
-        <div ngbDropdown class="d-inline-block">
+    <div class="row group-type-navigation align-items-center">
+      <div class="col-md-3 left">
+        <div ngbDropdown class="d-block">
           <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} ({{typeCounts[selectedType ? selectedType['id'] : 'all']}})</button>
-          <div ngbDropdownMenu>
+          <div ngbDropdownMenu class="w-100">
             <button class="dropdown-item" (click)="setAssetType(null)">All Content ({{typeCounts['all']}})</button>
             <ng-container *ngFor="let type of data['assetTypes']">
               <button *ngIf="typeCounts[type['id']] > 0" class="dropdown-item" (click)="setAssetType(type)">{{dataService.translate(type['nameTranslateId'])}} ({{typeCounts[type['id']]}})</button>
@@ -19,10 +19,7 @@
           </div>
         </div>
       </div>
-      <h5 class="title">{{dataService.translate(selectedGroupType['nameTranslateId'])}}</h5>
-      <div class="right">
-
-      </div>
+      <div class="title col-md-6">{{dataService.translate(selectedGroupType['nameTranslateId'])}}</div>
     </div>
     <div class="clearfix"></div>
     <div class="asset-group-container d-flex justify-content-center flex-wrap">
