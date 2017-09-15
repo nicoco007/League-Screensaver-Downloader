@@ -9,5 +9,10 @@ pipeline {
         cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true)
       }
     }
+    stage('Deploy') {
+      steps {
+        sh 'cp ** /var/www/gnyra.com/public_html/screensaver/'
+      }
+    }
   }
 }
