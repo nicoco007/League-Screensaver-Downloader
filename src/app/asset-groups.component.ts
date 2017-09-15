@@ -32,7 +32,8 @@ export class AssetGroupsComponent implements OnInit {
   closeResult: string;
   display = 'none';
   show = false;
-  assets: Object[];
+  group: Object;
+  assets = [];
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
@@ -46,10 +47,20 @@ export class AssetGroupsComponent implements OnInit {
   }
 
   open(modal, group) {
-    this.assets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1);
+    this.group = group;
+    this.assets = [];
+
+    for (let i = 0; i < group['assets'].length; i++) {
+      this.assets.push(this.getAsset(group['assets'][i]));
+    }
+
     this.appComponent.cssClass = 'modal-open';
     modal.classList.add('d-block');
     setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
+  }
+
+  getAsset(assetId) {
+    return this.data['assets'].filter(asset => asset['id'] === assetId)[0];
   }
 
   dismiss(modal) {

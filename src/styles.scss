@@ -46,11 +46,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #AF9255
+  color: rgb(175, 146, 85);
 }
 
 a:hover, a:focus {
-  color: #C4B998;
+  color: rgb(181, 151, 88);;
   text-decoration: none
 }
 
@@ -77,14 +77,13 @@ a:hover, a:focus {
     margin-bottom: 30px;
     border: 0;
 
-    .close {
+    button.close {
       display: inline-block;
       float: none;
       padding: 25px;
-      border: 1px solid rgb(181, 151, 88);
-      border-top: none;
       text-shadow: none;
-      color: rgb(181, 151, 88);
+      border: 1px solid rgb(50, 43, 34);
+      border-top: 0;
     }
   }
 
@@ -113,4 +112,20 @@ a:hover, a:focus {
       padding: 40px 0 15px 0;
     }
   }
+}
+
+.btn-default {
+  cursor: pointer;
+  background-color: rgb(19, 19, 21);
+  border: 1px solid rgb(50, 43, 34);
+  color: rgb(181, 151, 88);
+  opacity: 1;
+  transition: .2s linear background-color, .2s linear color;
+}
+
+.btn-default:hover, .btn-default:active, .btn-default:focus {
+  background-color: rgb(26, 29, 33);
+  color: rgb(196, 185, 152);
+  opacity: 1;
+  outline: 0;
 }
