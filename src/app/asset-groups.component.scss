@@ -1,7 +1,4 @@
-$primary: rgb(181, 151, 88);
-$primary-dark: rgb(147, 115, 65);
-$primary-light: rgb(196, 185, 152);
-$border-color: rgb(65, 59, 48);
+@import 'colors';
 
 .nav-pills {
   .nav-link {
@@ -20,7 +17,53 @@ $border-color: rgb(65, 59, 48);
   border: 1px solid #413B30;
   display: table;
   width: 100%;
-  padding: 25px 0;
+  padding: 15px 0;
+}
+
+.asset-group-type-container {
+  .nav {
+    text-align: center;
+    margin: 40px 0;
+    position: relative;
+    display: block;
+
+    .left {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: -1px;
+        width: 1px;
+        height: 40px;
+        margin-top: -20px;
+        background-color: #262626;
+      }
+
+      .btn {
+        font-weight: bold;
+        position: static;
+      }
+    }
+
+    .title {
+      display: block;
+      font-size: 20px;
+      padding: 20px;
+      color: $primary-light;
+      font-weight: normal;
+    }
+
+    .right {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
 }
 
 .tab-content {

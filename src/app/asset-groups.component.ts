@@ -29,20 +29,21 @@ export class AssetGroupsComponent implements OnInit {
 
   data: Object;
   activeId: string;
-  closeResult: string;
-  display = 'none';
   show = false;
   group: Object;
   assets = [];
 
+  selectedType: Object;
+  count: number;
+
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
       this.data = data;
+      this.activeId = data['assetGroupTypes'][0]['id'];
     });
   }
 
   select(tabId): void {
-    console.log(tabId);
     this.activeId = tabId;
   }
 
@@ -82,5 +83,19 @@ export class AssetGroupsComponent implements OnInit {
     }
 
     return Math.max(size, 0.1).toFixed(1) + byteUnits[i];
+  }
+
+  assetCountForGroup(group): number {
+    const assets = [];
+
+    for (let i = 0; i < group['assets'].length; i++) {
+      const asset = this.getAsset(group['assets'][i]);
+
+      if (asset && (!this.selectedType || asset['tags'].indexOf(this.selectedType['id']) !== -1)) {
+        assets.push(asset);
+      }
+    }
+
+    return assets.length;
   }
 }

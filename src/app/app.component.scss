@@ -1,3 +1,12 @@
+@import 'colors';
+
 .app-container {
   padding: 50px;
+}
+
+.app-title {
+  text-align: center;
+  margin-bottom: 50px;
+  color: $primary-light;
+  font-weight: bold;
 }

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class DataService {
   private data: Object;
-  private locale = 'fr_FR';
+  private locale = 'en_US';
 
   constructor(private http: Http) {}
 

@@ -8,19 +8,39 @@
   </div>
   <div class="tab-content asset-group-type-container">
     <div *ngFor="let groupType of data['assetGroupTypes']; let first = first" class="tab-pane asset-group-type active" [@paneState]="(activeId ? groupType['id'] === activeId : first) ? 'active' : 'inactive'" role="tabpanel">
-      <div class="asset-group-container d-flex justify-content-center flex-wrap">
-        <div *ngFor="let group of data['assetGroups'] | tagfilter: groupType['id'] | translationsort; let i = index" class="asset-group" (click)="open(modal, group)">
-          <img class="background" src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}">
-          <div class="footer">
-            <div class="inner">{{dataService.translate([group['nameTranslateId']])}}</div>
-          </div>
-          <div class="overlay">
-            <div class="inner d-flex justify-content-center"><span class="align-self-center">{{dataService.translate([group['nameTranslateId']])}}</span></div>
-            <div class="footer">
-              <div class="inner">View All<br/>({{group['assets'].length}})</div>
+      <div class="nav">
+        <div class="left">
+          <div ngbDropdown class="d-inline-block">
+            <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}}</button>
+            <div ngbDropdownMenu>
+              <button class="dropdown-item" (click)="selectedType = null">All Content</button>
+              <ng-container *ngFor="let type of data['assetTypes']">
+                <button class="dropdown-item" (click)="selectedType = type">{{dataService.translate(type['nameTranslateId'])}}</button>
+              </ng-container>
             </div>
           </div>
         </div>
+        <h5 class="title">{{dataService.translate(groupType['nameTranslateId'])}}</h5>
+        <div class="right">
+
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="asset-group-container d-flex justify-content-center flex-wrap">
+        <ng-container *ngFor="let group of data['assetGroups'] | tag: groupType['id'] | translationsort">
+          <div *ngIf="assetCountForGroup(group) > 0" class="asset-group" (click)="open(modal, group)">
+            <img class="background" src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}">
+            <div class="footer">
+              <div class="inner">{{dataService.translate(group['nameTranslateId'])}}</div>
+            </div>
+            <div class="overlay">
+              <div class="inner d-flex justify-content-center"><span class="align-self-center">{{dataService.translate([group['nameTranslateId']])}}</span></div>
+              <div class="footer">
+                <div class="inner">View All<br/>({{assetCountForGroup(group)}})</div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -39,7 +59,7 @@
           </div>
           <div *ngIf="assets">
             <div class="assets-container d-flex justify-content-center flex-wrap">
-              <div *ngFor="let asset of assets;" class="asset align-self-center">
+              <div *ngFor="let asset of assets | tag: (selectedType ? selectedType['id'] : null);" class="asset align-self-center">
                 <div [ngSwitch]="asset['type']" class="background">
                   <img *ngSwitchDefault src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailUrl']}}"/>
                   <video *ngSwitchCase="'video/webm'" autoplay loop>
