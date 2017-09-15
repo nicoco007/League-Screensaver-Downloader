@@ -13,14 +13,15 @@ export class AssetGroupsComponent implements OnInit {
   constructor(private appComponent: AppComponent, public dataService: DataService) {}
 
   data: Object;
+
   selectedGroupType: Object;
-  show = false;
+  selectedType: Object;
+
   group: Object;
   assets = [];
   counts = {};
   typeCounts = {};
 
-  selectedType: Object;
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {

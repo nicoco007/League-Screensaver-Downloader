@@ -1,5 +1,9 @@
 @import 'colors';
 
+@import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
+@import '../../node_modules/bootstrap/scss/mixins/breakpoints';
+
 .app-container {
   padding: 50px;
 }
@@ -10,3 +14,24 @@
   color: $primary-light;
   font-weight: bold;
 }
+
+@include media-breakpoint-down(sm) {
+  .app-container {
+    padding: 30px;
+  }
+
+  .app-title {
+    font-size: 32px;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .app-title {
+    font-size: 24px;
+  }
+}
+

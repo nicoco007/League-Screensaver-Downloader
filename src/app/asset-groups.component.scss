@@ -88,6 +88,11 @@
   }
 }
 
+.background {
+  max-width: 100%;
+  height: auto;
+}
+
 .asset-group {
   cursor: pointer;
   margin: 13px;
@@ -207,11 +212,11 @@
         text-align: center;
 
         .inner {
-          width: 15%;
+          width: 100%;
 
           svg {
             fill: $primary-dark;
-            width: 100%;
+            width: 20%;
           }
         }
       }
