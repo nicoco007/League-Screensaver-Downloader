@@ -51,7 +51,7 @@ a {
   color: $primary;
 }
 
-a:hover, a:focus {
+a:hover, a:focus, a:active {
   color: $primary-light;
   text-decoration: none
 }

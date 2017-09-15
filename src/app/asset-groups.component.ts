@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {trigger, state, style, animate, transition, query} from '@angular/animations';
 
 import {DataService} from './data.service';
@@ -28,40 +28,45 @@ export class AssetGroupsComponent implements OnInit {
   constructor(private appComponent: AppComponent, public dataService: DataService) {}
 
   data: Object;
-  activeId: string;
+  selectedGroupType: Object;
   show = false;
   group: Object;
   assets = [];
+  counts = {};
+  typeCounts = {};
 
   selectedType: Object;
-  count: number;
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
       this.data = data;
-      this.activeId = data['assetGroupTypes'][0]['id'];
+      this.selectedGroupType = data['assetGroupTypes'][0];
+      this.updateCounts();
+      this.updateTypeCounts();
     });
   }
 
-  select(tabId): void {
-    this.activeId = tabId;
+  changeTab(groupType) {
+    this.selectedGroupType = groupType;
+    this.selectedType = null;
+    this.updateTypeCounts();
+    this.updateCounts();
+  }
+
+  setAssetType(type) {
+    this.selectedType = type;
+    this.updateCounts();
   }
 
   open(modal, group): void {
     this.group = group;
-    this.assets = [];
-
-    for (let i = 0; i < group['assets'].length; i++) {
-      this.assets.push(this.getAsset(group['assets'][i]));
-    }
+    this.assets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1).sort((a, b) => {
+      return group['assets'].indexOf(a['id']) > group['assets'].indexOf(b['id']);
+    });
 
     this.appComponent.cssClass = 'modal-open';
     modal.classList.add('d-block');
     setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
-  }
-
-  getAsset(assetId): Object {
-    return this.data['assets'].filter(asset => asset['id'] === assetId)[0];
   }
 
   dismiss(modal): void {
@@ -74,7 +79,7 @@ export class AssetGroupsComponent implements OnInit {
 
   // noinspection JSMethodCanBeStatic
   humanReadableFileSize(size: number): string {
-    const byteUnits = [' B', ' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+    const byteUnits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     let i = 0;
 
     while (size > 1024) {
@@ -82,20 +87,35 @@ export class AssetGroupsComponent implements OnInit {
       i++;
     }
 
-    return Math.max(size, 0.1).toFixed(1) + byteUnits[i];
+    return Math.max(size, 0.1).toFixed(1) + ' ' + byteUnits[i];
   }
 
-  assetCountForGroup(group): number {
-    const assets = [];
+  updateCounts() {
+    const assetGroups = this.data['assetGroups'];
 
-    for (let i = 0; i < group['assets'].length; i++) {
-      const asset = this.getAsset(group['assets'][i]);
+    for (let i = 0; i < assetGroups.length; i++) {
+      const group = assetGroups[i];
+      this.counts[group['id']] = this.data['assets'].filter(asset => {
+        return group['assets'].indexOf(asset['id']) !== -1 && (!this.selectedType || asset['tags'].indexOf(this.selectedType['id']) !== -1);
+      }).length;
+    }
+  }
 
-      if (asset && (!this.selectedType || asset['tags'].indexOf(this.selectedType['id']) !== -1)) {
-        assets.push(asset);
-      }
+  updateTypeCounts() {
+    const assetTypes = this.data['assetTypes'];
+    const assetGroups = this.data['assetGroups'];
+
+    for (let i = 0; i < assetTypes.length; i++) {
+      const type = assetTypes[i];
+      this.typeCounts[type['id']] = this.data['assets'].filter(asset => {
+        const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
+        return asset['tags'].indexOf(type['id']) !== -1 && group['tags'].indexOf(this.selectedGroupType['id']) !== -1;
+      }).length;
     }
 
-    return assets.length;
+    this.typeCounts['all'] = this.data['assets'].filter(asset => {
+      const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
+      return group['tags'].indexOf(this.selectedGroupType['id']) !== -1;
+    }).length;
   }
 }

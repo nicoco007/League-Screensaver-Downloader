@@ -26,7 +26,7 @@ export class DataService {
   }
 
   translate(msgid: string): string {
-    if (this.data['locale']['translations'].hasOwnProperty(this.locale)) {
+    if (this.data['locale']['translations'][this.locale]) {
       return this.data['locale']['translations'][this.locale][msgid];
     } else {
       return this.data['locale']['translations'][this.data['locale']['fallbackLocale']][msgid];

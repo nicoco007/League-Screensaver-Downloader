@@ -13,6 +13,7 @@ import {DataService} from './data.service';
 import {TagFilterPipe} from './tag-filter.pipe';
 import {IdFilterPipe} from './id-filter.pipe';
 import {TranslationSortPipe} from './translation-sort.pipe';
+import {OnCreateDirective} from './on-create.directive';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {TranslationSortPipe} from './translation-sort.pipe';
     AssetGroupsComponent,
     TagFilterPipe,
     IdFilterPipe,
-    TranslationSortPipe
+    TranslationSortPipe,
+    OnCreateDirective
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

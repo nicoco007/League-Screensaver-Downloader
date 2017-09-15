@@ -2,13 +2,23 @@
 
 .nav-pills {
   .nav-link {
-    color: #AF9255;
+    padding: 10px;
+    border-radius: 0;
+    cursor: pointer;
+    background-color: transparent;
+    color: $primary;
+    opacity: 1;
+    transition: .2s linear all;
+    outline: 0;
+    letter-spacing: 2px;
+    border: 0;
 
     &:hover, &:focus, &:active, &.active {
-      color: #C4B998;
-      text-decoration: none;
-      background-color: transparent;
-      border-radius: 0;
+      background: transparent;
+      color: $primary-light;
+      opacity: 1;
+      outline: 0;
+      box-shadow: none;
     }
   }
 }
@@ -63,6 +73,10 @@
       top: 0;
       right: 0;
     }
+  }
+
+  .asset-group-type {
+    width: 100%;
   }
 }
 
