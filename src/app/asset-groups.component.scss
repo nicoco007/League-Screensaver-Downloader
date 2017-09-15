@@ -31,6 +31,10 @@
 }
 
 .asset-group-type-container {
+  .center-container {
+    text-align: center;
+  }
+
   .group-type-navigation {
     margin: 40px 0;
 
@@ -88,7 +92,7 @@
   cursor: pointer;
   margin: 13px;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   & > .background {
     transition: 200ms all;
@@ -98,17 +102,18 @@
     transition: 200ms all;
     opacity: 1;
     position: absolute;
-    display: table;
+    display: flex;
+    justify-content: center;
     bottom: 0;
-    width: 100%;
+    left: 0;
+    right: 0;
     height: 60px;
     background: rgba(19, 19, 21, 0.88);
     border-top: 1px solid rgb(134, 106, 61);
+    margin: 0 -1px -1px -1px;
 
     & > .inner {
-      display: table-cell;
-      text-align: center;
-      vertical-align: middle;
+      align-self: center;
       font-size: 13px;
       color: rgb(196, 185, 152);
     }
@@ -117,13 +122,14 @@
   & > .overlay {
     transition: 200ms all;
     opacity: 0;
+    margin: -1px;
 
     background-color: rgba(0, 0, 0, 0.65);
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    bottom: 0;
+    right: 0;
     padding: 10px;
     text-align: center;
 

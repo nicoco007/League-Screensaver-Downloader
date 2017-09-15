@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {trigger, state, style, animate, transition, query} from '@angular/animations';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 
 import {DataService} from './data.service';
 import {AppComponent} from './app.component';
@@ -8,24 +7,12 @@ import {AppComponent} from './app.component';
   selector: 'app-asset-groups',
   templateUrl: './asset-groups.component.html',
   styleUrls: ['./asset-groups.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger('paneState', [
-      state('active', style({
-        opacity: 1,
-        display: 'block'
-      })),
-      state('inactive', style({
-        opacity: 0,
-        display: 'none'
-      })),
-      transition('inactive => active', animate('300ms ease')),
-      transition('active => inactive', animate('300ms ease'))
-    ])
-  ]
+  encapsulation: ViewEncapsulation.None
 })
 export class AssetGroupsComponent implements OnInit {
   constructor(private appComponent: AppComponent, public dataService: DataService) {}
+
+  @ViewChild('centerContainer') container: ElementRef;
 
   data: Object;
   selectedGroupType: Object;
