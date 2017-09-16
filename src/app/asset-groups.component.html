@@ -6,7 +6,7 @@
       </li>
     </ul>
   </div>
-  <div class="asset-group-type-container">
+  <div class="asset-group-types">
     <div class="row group-type-navigation align-items-center">
       <div class="col-md-12 col-lg-4 col-xl-3 left">
         <div ngbDropdown class="d-block">
@@ -22,7 +22,7 @@
       <div class="title col-md-12 col-lg-4 col-xl-6">{{dataService.translate(selectedGroupType['nameTranslateId'])}}</div>
     </div>
     <div class="clearfix"></div>
-    <div class="asset-group-container d-flex justify-content-center flex-wrap">
+    <div class="asset-groups">
       <ng-container *ngFor="let group of data['assetGroups'] | tag: selectedGroupType['id'] | translationsort">
         <div *ngIf="counts[group['id']] > 0" class="asset-group" (click)="open(modal, group)">
           <img class="background" src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}">
@@ -30,9 +30,9 @@
             <div class="inner">{{dataService.translate(group['nameTranslateId'])}}</div>
           </div>
           <div class="overlay">
-            <div class="inner d-flex justify-content-center"><span class="align-self-center">{{dataService.translate([group['nameTranslateId']])}}</span></div>
-            <div class="footer">
-              <div class="inner">View All<br/>({{counts[group['id']]}})</div>
+            <div class="overlay-inner"><span class="align-self-center">{{dataService.translate([group['nameTranslateId']])}}</span></div>
+            <div class="overlay-footer">
+              <div class="overlay-footer-inner">View All<br/>({{counts[group['id']]}})</div>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
             <h1 class="modal-title">{{dataService.translate(group['nameTranslateId'])}}</h1>
           </div>
           <div *ngIf="assets">
-            <div class="assets-container d-flex justify-content-center flex-wrap">
+            <div class="assets">
               <div *ngFor="let asset of assets | tag: (selectedType ? selectedType['id'] : null);" class="asset align-self-center">
                 <ng-container [ngSwitch]="asset['type']">
                   <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailUrl']}}"/>
@@ -62,15 +62,15 @@
                   </video>
                 </ng-container>
                 <div class="overlay">
-                  <a class="download d-flex justify-content-center flex-column" href="http://content.nicoco007.com/lolwd/serve.php?asset={{asset['videoUrl'] ? asset['videoUrl'] : asset['url']}}" download>
-                    <span class="inner align-self-center">
+                  <a class="download" href="http://content.nicoco007.com/lolwd/serve.php?asset={{asset['videoUrl'] ? asset['videoUrl'] : asset['url']}}" download>
+                    <span class="overlay-inner align-self-center">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
                         <g id="surface">
-                          <path style="" d="M 15 4 L 15 20.5625 L 9.71875 15.28125 L 8.28125 16.71875 L 15.28125 23.71875 L 16 24.40625 L 16.71875 23.71875 L 23.71875 16.71875 L 22.28125 15.28125 L 17 20.5625 L 17 4 Z M 7 26 L 7 28 L 25 28 L 25 26 Z"></path>
+                          <path d="M 15 4 L 15 20.5625 L 9.71875 15.28125 L 8.28125 16.71875 L 15.28125 23.71875 L 16 24.40625 L 16.71875 23.71875 L 23.71875 16.71875 L 22.28125 15.28125 L 17 20.5625 L 17 4 Z M 7 26 L 7 28 L 25 28 L 25 26 Z"></path>
                         </g>
                       </svg>
                     </span>
-                    <div class="footer">
+                    <div class="overlay-footer">
                       Download<br/>({{humanReadableFileSize(asset['size'])}})
                     </div>
                   </a>

@@ -4,34 +4,75 @@
 @import '../../node_modules/bootstrap/scss/variables';
 @import '../../node_modules/bootstrap/scss/mixins/breakpoints';
 
-.app-container {
+.scroll {
   padding: 50px;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.app-title {
+.app-container {
+  min-height: 90%;
+  border: 1px solid $border-color;
+}
+
+.app-header {
+  display: block;
   text-align: center;
-  margin-bottom: 50px;
-  color: $primary-light;
-  font-weight: bold;
+
+  .app-title {
+    text-align: center;
+    color: $primary-light;
+    font-weight: bold;
+    margin-top: -25px;
+    background-color: $background-color;
+    display: inline-block;
+    padding: 0 20px;
+  }
+}
+
+.app-body {
+  display: block;
+}
+
+.app-footer {
+  font-size: 8px;
+  text-align: center;
+  margin: 15px;
+  color: $primary-dark;
+
+  p {
+    margin-bottom: .25rem;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .app-header {
+    .app-title {
+      margin-top: 10px;
+    }
+  }
 }
 
 @include media-breakpoint-down(sm) {
-  .app-container {
+  .scroll {
     padding: 30px;
   }
 
-  .app-title {
-    font-size: 32px;
+  .app-header {
+    .app-title {
+      font-size: 32px;
+    }
   }
 }
 
 @include media-breakpoint-down(xs) {
-  .app-container {
+  .scroll {
     padding: 10px;
   }
 
-  .app-title {
-    font-size: 24px;
+  .app-header {
+    .app-title {
+      font-size: 20px;
+    }
   }
 }
-
