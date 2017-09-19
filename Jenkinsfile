@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm install -d'
-        sh 'ng build --prod'
+        sh 'ng build --prod --base-href /screensaver/'
         archiveArtifacts 'dist/**'
       }
     }
