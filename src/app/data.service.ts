@@ -11,7 +11,7 @@ export class DataService {
   constructor(private http: Http) {}
 
   loadData(): Promise<Object> {
-    return this.http.get('http://content.nicoco007.com/lolwd/data.php')
+    return this.http.get('https://content.nicoco007.com/lolwd/data.php')
       .toPromise()
       .then(response => {
         this.data = response.json();
