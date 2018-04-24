@@ -25,7 +25,7 @@
     <div class="asset-groups">
       <ng-container *ngFor="let group of data['assetGroups'] | tag: selectedGroupType['id'] | translationsort">
         <div *ngIf="counts[group['id']] > 0" class="asset-group" (click)="open(modal, group)">
-          <img class="background" src="https://screensaver.riotgames.com/latest/content/{{group['previewThumbnailUrl']}}">
+          <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group['previewThumbnailUrl']}}">
           <div class="footer">
             <div class="inner">{{dataService.translate(group['nameTranslateId'])}}</div>
           </div>
@@ -56,13 +56,13 @@
             <div class="assets">
               <div *ngFor="let asset of assets | tag: (selectedType ? selectedType['id'] : null);" class="asset align-self-center">
                 <ng-container [ngSwitch]="asset['type']">
-                  <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailUrl']}}"/>
+                  <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{asset['thumbnailUrl']}}"/>
                   <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
-                    <source src="https://screensaver.riotgames.com/latest/content/{{asset['thumbnailVideoUrl']}}" type="video/mp4">
+                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset['thumbnailVideoUrl']}}" type="video/mp4">
                   </video>
                 </ng-container>
                 <div class="overlay">
-                  <a class="download" href="http://content.nicoco007.com/lolwd/serve.php?asset={{asset['videoUrl'] ? asset['videoUrl'] : asset['url']}}" download>
+                  <a class="download" (click)="download(asset)" href="#">
                     <span class="overlay-inner align-self-center">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
                         <g id="surface">

@@ -10,7 +10,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'rm -r /var/www/nicoco007.com/public_html/screensaver/*'
+        sh 'rm -rf /var/www/nicoco007.com/public_html/screensaver'
         sh 'cp -r dist/* /var/www/nicoco007.com/public_html/screensaver/'
       }
     }

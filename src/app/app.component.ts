@@ -10,4 +10,9 @@ import 'rxjs/add/operator/toPromise';
 })
 export class AppComponent {
   @HostBinding('class') public cssClass = '';
+  private date;
+
+  constructor() {
+    this.date = new Date();
+  }
 }

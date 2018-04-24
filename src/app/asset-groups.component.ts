@@ -104,4 +104,8 @@ export class AssetGroupsComponent implements OnInit {
       return group['tags'].indexOf(this.selectedGroupType['id']) !== -1;
     }).length;
   }
+
+  download(asset) {
+    this.dataService.download(asset['videoUrl'] ? asset['videoUrl'] : asset['url']);
+  }
 }
