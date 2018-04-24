@@ -1,6 +1,7 @@
 import {Asset} from './asset';
+import {Translatable} from './translatable';
 
-export class Collection {
+export class Collection implements Translatable {
   constructor(
     public id: string,
     public nameTranslateId: string,

@@ -5,6 +5,8 @@ import {AppComponent} from './app.component';
 import {Tab} from './tab';
 import {Collection} from './collection';
 import {Asset} from './asset';
+import {Translatable} from './translatable';
+import {AssetGroup} from './asset-group';
 
 @Component({
   selector: 'app-asset-groups',
@@ -29,8 +31,7 @@ export class AssetGroupsComponent implements OnInit {
     return Array.from(this._collections.values());
   }
 
-  group: Object;
-  collection: Collection;
+  selectedGroup: Translatable;
   counts = {};
   typeCounts = {};
   selectedAssets: Asset[];
@@ -129,8 +130,8 @@ export class AssetGroupsComponent implements OnInit {
     this.updateCounts();
   }
 
-  open(modal, group): void {
-    this.group = group;
+  open(modal, group: AssetGroup): void {
+    this.selectedGroup = group;
 
     this.selectedAssets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1).sort((a, b) => {
       return group['assets'].indexOf(a['id']) > group['assets'].indexOf(b['id']);
@@ -142,7 +143,7 @@ export class AssetGroupsComponent implements OnInit {
   }
 
   showCollection(modal, collection: Collection) {
-    this.collection = collection;
+    this.selectedGroup = collection;
     this.selectedAssets = collection.assets;
 
     this.appComponent.cssClass = 'modal-open';

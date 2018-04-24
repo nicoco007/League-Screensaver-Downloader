@@ -76,8 +76,8 @@
           </button>
         </div>
         <div class="modal-body">
-          <div *ngIf="group" class="modal-title-container">
-            <h1 class="modal-title">{{dataService.translate(group['nameTranslateId'])}}</h1>
+          <div *ngIf="selectedGroup" class="modal-title-container">
+            <h1 class="modal-title">{{dataService.translate(selectedGroup['nameTranslateId'])}}</h1>
           </div>
           <div *ngIf="selectedAssets">
             <div class="assets">
