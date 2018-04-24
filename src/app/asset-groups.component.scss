@@ -26,60 +26,58 @@
   }
 }
 
-.asset-group-types {
-  .group-type-navigation {
-    margin: 40px 15px;
+.tab-navigation {
+  margin: 40px 15px;
 
-    .left {
-      padding: 0;
+  .left {
+    padding: 0;
 
-      .dropdown-toggle {
-        position: relative;
-        font-weight: bold;
-        text-align: left;
+    .dropdown-toggle {
+      position: relative;
+      font-weight: bold;
+      text-align: left;
 
-        &::before {
-          content: "";
-          display: block;
-          position: absolute;
-          top: 50%;
-          width: 1px;
-          height: 40px;
-          margin-top: -20px;
-          background-color: #262626;
-          right: -1px;
-          z-index: -1;
-        }
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        width: 1px;
+        height: 40px;
+        margin-top: -20px;
+        background-color: #262626;
+        right: -1px;
+        z-index: -1;
+      }
 
-        &::after {
-          display: inline-block;
-          width: 0;
-          height: 0;
-          margin-left: .255em;
-          content: "";
-          border-top: .45em solid;
-          border-right: .3em solid transparent;
-          border-left: .3em solid transparent;
-          right: 15px;
-          position: absolute;
-          top: 50%;
-          margin-top: -0.125rem;
-        }
+      &::after {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: .255em;
+        content: "";
+        border-top: .45em solid;
+        border-right: .3em solid transparent;
+        border-left: .3em solid transparent;
+        right: 15px;
+        position: absolute;
+        top: 50%;
+        margin-top: -0.125rem;
       }
     }
-
-    .title {
-      text-align: center;
-      font-size: 24px;
-      padding: 12px 0 22px 0;
-      color: $primary-light;
-      font-weight: normal;
-    }
   }
+}
 
-  .asset-group-type {
-    width: 100%;
-  }
+.asset-group-type {
+  width: 100%;
+}
+
+.tab-title {
+  text-align: center;
+  font-size: 24px;
+  padding: 12px 0 22px 0;
+  color: $primary-light;
+  font-weight: normal;
 }
 
 .background {
@@ -87,12 +85,12 @@
   height: auto;
 }
 
-.asset-groups {
+.asset-groups, .collections-content {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 
-  .asset-group {
+  .asset-group, .collection {
     cursor: pointer;
     margin: 13px;
     position: relative;
@@ -100,6 +98,7 @@
 
     & > .background {
       transition: 200ms all;
+      display: block;
     }
 
     & > .footer {

@@ -1,13 +1,40 @@
 <div *ngIf="data">
   <div class="main-navigation">
     <ul class="nav nav-pills asset-group-types justify-content-center">
-      <li *ngFor="let groupType of data['assetGroupTypes']" class="nav-item">
-        <button class="nav-link" [class.active]="groupType['id'] === selectedGroupType['id']" href (click)="changeTab(groupType)">{{dataService.translate(groupType['nameTranslateId'])}}</button>
+      <li *ngFor="let tab of tabs" class="nav-item">
+        <button class="nav-link" [class.active]="tab.id === selectedTab.id && tab.type === selectedTab.type" (click)="changeTab(tab)">{{tab.name}}</button>
       </li>
     </ul>
   </div>
-  <div class="asset-group-types">
-    <div class="row group-type-navigation align-items-center">
+
+  <div class="collections" *ngIf="selectedTab.type === 'custom' && selectedTab.id === 'collections'">
+    <div class="tab-navigation">
+      <div class="tab-title">{{selectedTab.name}}</div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="collections-content">
+      <div *ngFor="let collection of collections" class="collection" title="{{dataService.translate(collection.nameTranslateId)}}" (click)="showCollection(modal, collection)">
+        <ng-container [ngSwitch]="collection.cover.type">
+          <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{collection.cover.thumbnailUrl}}">
+          <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
+            <source src="https://screensaver.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/webm">
+          </video>
+        </ng-container>
+        <div class="footer">
+          <div class="inner">{{dataService.translate(collection.nameTranslateId)}}</div>
+        </div>
+        <div class="overlay">
+          <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(collection.nameTranslateId)}}</span></div>
+          <div class="overlay-footer">
+            <div class="overlay-footer-inner">View All<br/>({{collection.assets.length}})</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="asset-group-types" *ngIf="selectedTab.type === 'assetGroup'">
+    <div class="row tab-navigation align-items-center">
       <div class="col-md-12 col-lg-4 col-xl-3 left">
         <div ngbDropdown class="d-block">
           <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} ({{typeCounts[selectedType ? selectedType['id'] : 'all']}})</button>
@@ -19,18 +46,18 @@
           </div>
         </div>
       </div>
-      <div class="title col-md-12 col-lg-4 col-xl-6">{{dataService.translate(selectedGroupType['nameTranslateId'])}}</div>
+      <div class="tab-title col-md-12 col-lg-4 col-xl-6">{{selectedTab.name}}</div>
     </div>
     <div class="clearfix"></div>
     <div class="asset-groups">
-      <ng-container *ngFor="let group of data['assetGroups'] | tag: selectedGroupType['id'] | translationsort">
+      <ng-container *ngFor="let group of data['assetGroups'] | tag: selectedTab.id | translationsort">
         <div *ngIf="counts[group['id']] > 0" class="asset-group" (click)="open(modal, group)">
           <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group['previewThumbnailUrl']}}">
           <div class="footer">
             <div class="inner">{{dataService.translate(group['nameTranslateId'])}}</div>
           </div>
           <div class="overlay">
-            <div class="overlay-inner"><span class="align-self-center">{{dataService.translate([group['nameTranslateId']])}}</span></div>
+            <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(group['nameTranslateId'])}}</span></div>
             <div class="overlay-footer">
               <div class="overlay-footer-inner">View All<br/>({{counts[group['id']]}})</div>
             </div>
@@ -52,13 +79,13 @@
           <div *ngIf="group" class="modal-title-container">
             <h1 class="modal-title">{{dataService.translate(group['nameTranslateId'])}}</h1>
           </div>
-          <div *ngIf="assets">
+          <div *ngIf="selectedAssets">
             <div class="assets">
-              <div *ngFor="let asset of assets | tag: (selectedType ? selectedType['id'] : null);" class="asset align-self-center">
-                <ng-container [ngSwitch]="asset['type']">
-                  <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{asset['thumbnailUrl']}}"/>
+              <div *ngFor="let asset of selectedAssets | tag: (selectedType ? selectedType.id : null);" class="asset align-self-center">
+                <ng-container [ngSwitch]="asset.type">
+                  <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailUrl}}"/>
                   <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
-                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset['thumbnailVideoUrl']}}" type="video/mp4">
+                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/mp4">
                   </video>
                 </ng-container>
                 <div class="overlay">
@@ -71,7 +98,7 @@
                       </svg>
                     </span>
                     <div class="overlay-footer">
-                      Download<br/>({{humanReadableFileSize(asset['size'])}})
+                      Download<br/>({{humanReadableFileSize(asset.size)}})
                     </div>
                   </a>
                 </div>

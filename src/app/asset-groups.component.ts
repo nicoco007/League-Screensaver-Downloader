@@ -2,6 +2,9 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 
 import {DataService} from './data.service';
 import {AppComponent} from './app.component';
+import {Tab} from './tab';
+import {Collection} from './collection';
+import {Asset} from './asset';
 
 @Component({
   selector: 'app-asset-groups',
@@ -13,29 +16,109 @@ export class AssetGroupsComponent implements OnInit {
   constructor(private appComponent: AppComponent, public dataService: DataService) {}
 
   data: Object;
+  tabs: Tab[];
 
-  selectedGroupType: Object;
   selectedType: Object;
+  selectedTab: Tab;
+
+  private _assets: Map<string, Asset> = new Map<string, Asset>();
+  private _assetsByTag: Map<string, Asset[]> = new Map<string, Asset[]>();
+  private _collections: Map<string, Collection> = new Map<string, Collection>();
+
+  public get collections() {
+    return Array.from(this._collections.values());
+  }
 
   group: Object;
-  assets = [];
+  collection: Collection;
   counts = {};
   typeCounts = {};
-
+  selectedAssets: Asset[];
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
       if (data) {
-        this.data = data;
-        this.selectedGroupType = data['assetGroupTypes'][0];
-        this.updateCounts();
-        this.updateTypeCounts();
+        try {
+          this.loadData(data);
+        } catch (ex) {
+          console.log(ex);
+        }
       }
     });
   }
 
-  changeTab(groupType) {
-    this.selectedGroupType = groupType;
+  loadData(data) {
+    this.data = data;
+
+    this.tabs = [];
+    this.tabs.push(new Tab('collections', 'Collections', 'custom'));
+
+    for (const groupType of data['assetGroupTypes']) {
+      this.tabs.push(new Tab(groupType['id'], this.dataService.translate(groupType['nameTranslateId']), 'assetGroup'));
+    }
+
+    this.selectedTab = this.tabs[0];
+
+    this.selectedAssets = [];
+
+    this.loadAssets(data);
+    this.loadCollections(data);
+  }
+
+  private loadAssets(data) {
+    for (const obj of data['assets']) {
+      const asset = new Asset(
+        obj['id'],
+        obj['nameTranslateId'],
+        new Date(obj['dateAdded']),
+        obj['url'],
+        obj['tags'],
+        obj['type'],
+        obj['size'],
+        obj['color'],
+        obj['thumbnailUrl'],
+        obj['thumbnailSize'],
+        obj['thumbnailVideoUrl'] || null,
+        obj['thumbnailVideoSize'] || null
+      );
+
+      this._assets.set(asset.id, asset);
+
+      for (const tag of asset.tags) {
+        if (!this._assetsByTag.has(tag)) {
+          this._assetsByTag.set(tag, []);
+        }
+
+        this._assetsByTag.get(tag).push(asset);
+      }
+    }
+  }
+
+  private loadCollections(data) {
+    for (const collection of data['collections']['collections']) {
+      let collectionAssets = [];
+
+      if (collection['tags']) {
+        for (const tag of collection['tags']) {
+          const assets = this._assetsByTag.get(tag);
+          collectionAssets = collectionAssets.concat(assets);
+        }
+      }
+
+      this._collections.set(collection['id'], new Collection(
+        collection['id'],
+        collection['nameTranslateId'],
+        this._assets.get(collection['coverAssetId']),
+        collection['categories'],
+        collection['tags'],
+        collectionAssets,
+        false
+      ));
+    }
+  }
+
+  changeTab(tab) {
+    this.selectedTab = tab;
     this.selectedType = null;
     this.updateTypeCounts();
     this.updateCounts();
@@ -48,9 +131,19 @@ export class AssetGroupsComponent implements OnInit {
 
   open(modal, group): void {
     this.group = group;
-    this.assets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1).sort((a, b) => {
+
+    this.selectedAssets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1).sort((a, b) => {
       return group['assets'].indexOf(a['id']) > group['assets'].indexOf(b['id']);
     });
+
+    this.appComponent.cssClass = 'modal-open';
+    modal.classList.add('d-block');
+    setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
+  }
+
+  showCollection(modal, collection: Collection) {
+    this.collection = collection;
+    this.selectedAssets = collection.assets;
 
     this.appComponent.cssClass = 'modal-open';
     modal.classList.add('d-block');
@@ -97,13 +190,13 @@ export class AssetGroupsComponent implements OnInit {
       const type = assetTypes[i];
       this.typeCounts[type['id']] = this.data['assets'].filter(asset => {
         const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
-        return asset['tags'].indexOf(type['id']) !== -1 && group['tags'].indexOf(this.selectedGroupType['id']) !== -1;
+        return asset['tags'].indexOf(type['id']) !== -1 && group['tags'].indexOf(this.selectedTab.id) !== -1;
       }).length;
     }
 
     this.typeCounts['all'] = this.data['assets'].filter(asset => {
       const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
-      return group['tags'].indexOf(this.selectedGroupType['id']) !== -1;
+      return group['tags'].indexOf(this.selectedTab.id) !== -1;
     }).length;
   }
 
