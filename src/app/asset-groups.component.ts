@@ -25,10 +25,12 @@ export class AssetGroupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
-      this.data = data;
-      this.selectedGroupType = data['assetGroupTypes'][0];
-      this.updateCounts();
-      this.updateTypeCounts();
+      if (data) {
+        this.data = data;
+        this.selectedGroupType = data['assetGroupTypes'][0];
+        this.updateCounts();
+        this.updateTypeCounts();
+      }
     });
   }
 

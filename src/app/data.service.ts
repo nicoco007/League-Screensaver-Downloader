@@ -23,7 +23,7 @@ export class DataService {
       });
   }
 
-  loadData(): Promise<Object> {
+  loadData(): Promise<void | Object> {
     // return this.http.get('https://content.nicoco007.com/lolwd/data.php')
     return this.http.get('https://screensaver.riotgames.com/v2/latest/content/data.json')
       .toPromise()
