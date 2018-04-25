@@ -7,6 +7,9 @@ import {Collection} from './collection';
 import {Asset} from './asset';
 import {Translatable} from './translatable';
 import {AssetGroup} from './asset-group';
+import {AssetCollection} from './asset-collection';
+import {AssetGroupType} from './asset-group-type';
+import {AssetType} from './asset-type';
 
 @Component({
   selector: 'app-asset-groups',
@@ -20,21 +23,34 @@ export class AssetGroupsComponent implements OnInit {
   data: Object;
   tabs: Tab[];
 
-  selectedType: Object;
+  selectedType: AssetType;
   selectedTab: Tab;
 
   private _assets: Map<string, Asset> = new Map<string, Asset>();
+  private _assetTypes: Map<string, AssetType> = new Map<string, AssetType>();
   private _assetsByTag: Map<string, Asset[]> = new Map<string, Asset[]>();
+  private _assetGroups: Map<string, AssetGroup> = new Map<string, AssetGroup>();
+  private _assetGroupTypes: Map<string, AssetGroupType> = new Map<string, AssetGroupType>();
   private _collections: Map<string, Collection> = new Map<string, Collection>();
 
-  public get collections() {
+  public get assetTypes(): AssetType[] {
+    return Array.from(this._assetTypes.values());
+  }
+
+  public get assetGroups(): AssetGroup[] {
+    return Array.from(this._assetGroups.values());
+  }
+
+  public get assetGroupTypes(): AssetGroupType[] {
+    return Array.from(this._assetGroupTypes.values());
+  }
+
+  public get collections(): Collection[] {
     return Array.from(this._collections.values());
   }
 
   selectedGroup: Translatable;
-  counts = {};
-  typeCounts = {};
-  selectedAssets: Asset[];
+  selectedAssets: Asset[] = [];
 
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
@@ -51,19 +67,36 @@ export class AssetGroupsComponent implements OnInit {
   loadData(data) {
     this.data = data;
 
+    this.loadAssetTypes(data);
+    this.loadAssets(data);
+    this.loadAssetGroupTypes(data);
+    this.loadAssetGroups(data);
+    this.loadCollections(data);
+
+    this.loadTabs();
+  }
+
+  private loadTabs() {
     this.tabs = [];
     this.tabs.push(new Tab('collections', 'Collections', 'custom'));
 
-    for (const groupType of data['assetGroupTypes']) {
-      this.tabs.push(new Tab(groupType['id'], this.dataService.translate(groupType['nameTranslateId']), 'assetGroup'));
+    for (const groupType of this.assetGroupTypes) {
+      if (groupType.hidden === false) {
+        this.tabs.push(new Tab(groupType.id, this.dataService.translate(groupType.nameTranslateId), 'assetGroup'));
+      }
     }
 
     this.selectedTab = this.tabs[0];
+  }
 
-    this.selectedAssets = [];
-
-    this.loadAssets(data);
-    this.loadCollections(data);
+  private loadAssetTypes(data) {
+    for (const obj of data['assetTypes']) {
+      this._assetTypes.set(obj['id'], new AssetType(
+        obj['id'],
+        obj['nameTranslateId'],
+        new AssetCollection()
+      ));
+    }
   }
 
   private loadAssets(data) {
@@ -86,6 +119,10 @@ export class AssetGroupsComponent implements OnInit {
       this._assets.set(asset.id, asset);
 
       for (const tag of asset.tags) {
+        if (this._assetTypes.has(tag)) {
+          this._assetTypes.get(tag).assets.add(asset);
+        }
+
         if (!this._assetsByTag.has(tag)) {
           this._assetsByTag.set(tag, []);
         }
@@ -95,14 +132,55 @@ export class AssetGroupsComponent implements OnInit {
     }
   }
 
+  private loadAssetGroupTypes(data) {
+    for (const obj of data['assetGroupTypes']) {
+      this._assetGroupTypes.set(obj['id'], new AssetGroupType(
+        obj['id'],
+        obj['nameTranslateId'],
+        [],
+        obj['showAlphabet'] || false,
+        obj['hidden'] || false
+      ));
+    }
+  }
+
+  private loadAssetGroups(data) {
+    for (const obj of data['assetGroups']) {
+      const assets = new AssetCollection();
+
+      for (const assetId of obj['assets']) {
+        assets.add(this._assets.get(assetId));
+      }
+
+      const assetGroup = new AssetGroup(
+        obj['id'],
+        obj['nameTranslateId'],
+        obj['previewUrl'],
+        new Date(obj['dateAdded']),
+        assets,
+        obj['tags'],
+        obj['previewThumbnailUrl'],
+        obj['previewThumbnailSize']
+      );
+
+      for (const tag of obj['tags']) {
+        if (this._assetGroupTypes.has(tag)) {
+          this._assetGroupTypes.get(tag).assetGroups.push(assetGroup);
+        }
+      }
+
+      this._assetGroups.set(obj['id'], assetGroup);
+    }
+  }
+
   private loadCollections(data) {
     for (const collection of data['collections']['collections']) {
-      let collectionAssets = [];
+      const collectionAssets = new AssetCollection();
 
       if (collection['tags']) {
         for (const tag of collection['tags']) {
           const assets = this._assetsByTag.get(tag);
-          collectionAssets = collectionAssets.concat(assets);
+          collectionAssets.concat(assets);
         }
       }
 
@@ -121,31 +199,23 @@ export class AssetGroupsComponent implements OnInit {
   changeTab(tab) {
     this.selectedTab = tab;
     this.selectedType = null;
-    this.updateTypeCounts();
-    this.updateCounts();
   }
 
-  setAssetType(type) {
-    this.selectedType = type;
-    this.updateCounts();
-  }
-
-  open(modal, group: AssetGroup): void {
+  showAssetGroup(modal: HTMLDivElement, group: AssetGroup): void {
     this.selectedGroup = group;
+    this.selectedAssets = group.assets.toArray();
 
-    this.selectedAssets = this.data['assets'].filter(asset => group['assets'].indexOf(asset['id']) !== -1).sort((a, b) => {
-      return group['assets'].indexOf(a['id']) > group['assets'].indexOf(b['id']);
-    });
-
-    this.appComponent.cssClass = 'modal-open';
-    modal.classList.add('d-block');
-    setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
+    this.displayModal(modal);
   }
 
-  showCollection(modal, collection: Collection) {
+  showCollection(modal: HTMLDivElement, collection: Collection) {
     this.selectedGroup = collection;
-    this.selectedAssets = collection.assets;
+    this.selectedAssets = collection.assets.toArray();
 
+    this.displayModal(modal);
+  }
+
+  displayModal(modal: HTMLDivElement) {
     this.appComponent.cssClass = 'modal-open';
     modal.classList.add('d-block');
     setTimeout(() => modal.classList.add('show'), 20); // force this to happen after display=block
@@ -153,6 +223,7 @@ export class AssetGroupsComponent implements OnInit {
 
   dismiss(modal): void {
     modal.classList.remove('show');
+
     setTimeout(() => {
       modal.classList.remove('d-block');
       this.appComponent.cssClass = '';
@@ -170,35 +241,6 @@ export class AssetGroupsComponent implements OnInit {
     }
 
     return Math.max(size, 0.1).toFixed(1) + ' ' + byteUnits[i];
-  }
-
-  updateCounts() {
-    const assetGroups = this.data['assetGroups'];
-
-    for (let i = 0; i < assetGroups.length; i++) {
-      const group = assetGroups[i];
-      this.counts[group['id']] = this.data['assets'].filter(asset => {
-        return group['assets'].indexOf(asset['id']) !== -1 && (!this.selectedType || asset['tags'].indexOf(this.selectedType['id']) !== -1);
-      }).length;
-    }
-  }
-
-  updateTypeCounts() {
-    const assetTypes = this.data['assetTypes'];
-    const assetGroups = this.data['assetGroups'];
-
-    for (let i = 0; i < assetTypes.length; i++) {
-      const type = assetTypes[i];
-      this.typeCounts[type['id']] = this.data['assets'].filter(asset => {
-        const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
-        return asset['tags'].indexOf(type['id']) !== -1 && group['tags'].indexOf(this.selectedTab.id) !== -1;
-      }).length;
-    }
-
-    this.typeCounts['all'] = this.data['assets'].filter(asset => {
-      const group = assetGroups.find(item => item['assets'].indexOf(asset['id']) !== -1);
-      return group['tags'].indexOf(this.selectedTab.id) !== -1;
-    }).length;
   }
 
   download(asset) {

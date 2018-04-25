@@ -26,7 +26,7 @@
         <div class="overlay">
           <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(collection.nameTranslateId)}}</span></div>
           <div class="overlay-footer">
-            <div class="overlay-footer-inner">View All<br/>({{collection.assets.length}})</div>
+            <div class="overlay-footer-inner">View All<br/>({{collection.assets.toArray().length}})</div>
           </div>
         </div>
       </div>
@@ -37,11 +37,11 @@
     <div class="row tab-navigation align-items-center">
       <div class="col-md-12 col-lg-4 col-xl-3 left">
         <div ngbDropdown class="d-block">
-          <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} ({{typeCounts[selectedType ? selectedType['id'] : 'all']}})</button>
+          <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} (0)</button>
           <div ngbDropdownMenu class="w-100">
-            <button class="dropdown-item" (click)="setAssetType(null)">All Content ({{typeCounts['all']}})</button>
-            <ng-container *ngFor="let type of data['assetTypes']">
-              <button *ngIf="typeCounts[type['id']] > 0" class="dropdown-item" (click)="setAssetType(type)">{{dataService.translate(type['nameTranslateId'])}} ({{typeCounts[type['id']]}})</button>
+            <button class="dropdown-item" (click)="selectedType = null">All Content (0)</button>
+            <ng-container *ngFor="let type of assetTypes">
+              <button class="dropdown-item" (click)="selectedType = type">{{dataService.translate(type.nameTranslateId)}} (0)</button>
             </ng-container>
           </div>
         </div>
@@ -50,16 +50,16 @@
     </div>
     <div class="clearfix"></div>
     <div class="asset-groups">
-      <ng-container *ngFor="let group of data['assetGroups'] | tag: selectedTab.id | translationsort">
-        <div *ngIf="counts[group['id']] > 0" class="asset-group" (click)="open(modal, group)">
-          <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group['previewThumbnailUrl']}}">
+      <ng-container *ngFor="let group of assetGroups | tag: selectedTab.id | translationsort">
+        <div *ngIf="group.assets.type(selectedType).toArray().length" class="asset-group" (click)="showAssetGroup(modal, group)">
+          <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group.previewThumbnailUrl}}">
           <div class="footer">
-            <div class="inner">{{dataService.translate(group['nameTranslateId'])}}</div>
+            <div class="inner">{{dataService.translate(group.nameTranslateId)}}</div>
           </div>
           <div class="overlay">
-            <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(group['nameTranslateId'])}}</span></div>
+            <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(group.nameTranslateId)}}</span></div>
             <div class="overlay-footer">
-              <div class="overlay-footer-inner">View All<br/>({{counts[group['id']]}})</div>
+              <div class="overlay-footer-inner">View All<br/>({{group.assets.type(selectedType).toArray().length}})</div>
             </div>
           </div>
         </div>

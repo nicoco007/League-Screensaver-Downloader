@@ -1,5 +1,6 @@
 import {Asset} from './asset';
 import {Translatable} from './translatable';
+import {AssetCollection} from './asset-collection';
 
 export class Collection implements Translatable {
   constructor(
@@ -8,6 +9,6 @@ export class Collection implements Translatable {
     public cover: Asset,
     public categories: string[],
     public tags: string[],
-    public assets: Asset[],
+    public assets: AssetCollection,
     public featured: boolean) { }
 }
