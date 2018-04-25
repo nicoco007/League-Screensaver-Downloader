@@ -10,6 +10,8 @@ import {AssetGroup} from './asset-group';
 import {AssetCollection} from './asset-collection';
 import {AssetGroupType} from './asset-group-type';
 import {AssetType} from './asset-type';
+import {AssetGroupCollection} from './asset-group-collection';
+import {FilterableCollection} from './filterable-collection';
 
 @Component({
   selector: 'app-asset-groups',
@@ -23,6 +25,7 @@ export class AssetGroupsComponent implements OnInit {
   data: Object;
   tabs: Tab[];
 
+  selectedGroupType: FilterableCollection;
   selectedType: AssetType;
   selectedTab: Tab;
 
@@ -82,7 +85,7 @@ export class AssetGroupsComponent implements OnInit {
 
     for (const groupType of this.assetGroupTypes) {
       if (groupType.hidden === false) {
-        this.tabs.push(new Tab(groupType.id, this.dataService.translate(groupType.nameTranslateId), 'assetGroup'));
+        this.tabs.push(new Tab(groupType.id, this.dataService.translate(groupType.nameTranslateId), 'assetGroupType'));
       }
     }
 
@@ -137,7 +140,7 @@ export class AssetGroupsComponent implements OnInit {
       this._assetGroupTypes.set(obj['id'], new AssetGroupType(
         obj['id'],
         obj['nameTranslateId'],
-        [],
+        new AssetGroupCollection(),
         obj['showAlphabet'] || false,
         obj['hidden'] || false
       ));
@@ -165,7 +168,7 @@ export class AssetGroupsComponent implements OnInit {
 
       for (const tag of obj['tags']) {
         if (this._assetGroupTypes.has(tag)) {
-          this._assetGroupTypes.get(tag).assetGroups.push(assetGroup);
+          this._assetGroupTypes.get(tag).assetGroups.add(assetGroup);
         }
       }
 
@@ -199,6 +202,10 @@ export class AssetGroupsComponent implements OnInit {
   changeTab(tab) {
     this.selectedTab = tab;
     this.selectedType = null;
+
+    if (tab.type === 'assetGroupType' && this._assetGroupTypes.has(tab.id)) {
+      this.selectedGroupType = this._assetGroupTypes.get(tab.id).assetGroups;
+    }
   }
 
   showAssetGroup(modal: HTMLDivElement, group: AssetGroup): void {

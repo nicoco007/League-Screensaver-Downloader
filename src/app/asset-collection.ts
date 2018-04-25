@@ -1,20 +1,21 @@
 import {Asset} from './asset';
 import {AssetType} from './asset-type';
+import {FilterableCollection} from './filterable-collection';
 
-export class AssetCollection {
-  private assets: Asset[];
-  private cache: Map<string, AssetCollection> = new Map<string, AssetCollection>();
+export class AssetCollection implements FilterableCollection {
+  private _assets: Asset[];
+  private _cache: Map<string, AssetCollection> = new Map<string, AssetCollection>();
 
   constructor(assets: Asset[] = []) {
-    this.assets = assets;
+    this._assets = assets;
   }
 
   public add(asset: Asset): void {
-    this.assets.push(asset);
+    this._assets.push(asset);
   }
 
   public concat(assets: Asset[]): void {
-    this.assets = this.assets.concat(assets);
+    this._assets = this._assets.concat(assets);
   }
 
   public type(type: AssetType): AssetCollection {
@@ -22,13 +23,13 @@ export class AssetCollection {
       return this;
     }
 
-    if (this.cache.has(type.id)) {
-      return this.cache.get(type.id);
+    if (this._cache.has(type.id)) {
+      return this._cache.get(type.id);
     }
 
     const assets = [];
 
-    for (const asset of this.assets) {
+    for (const asset of this._assets) {
       if (asset.tags.indexOf(type.id) !== -1) {
         assets.push(asset);
       }
@@ -36,12 +37,16 @@ export class AssetCollection {
 
     const assetCollection = new AssetCollection(assets);
 
-    this.cache.set(type.id, assetCollection);
+    this._cache.set(type.id, assetCollection);
 
     return assetCollection;
   }
 
+  public size() {
+    return this._assets.length;
+  }
+
   public toArray() {
-    return this.assets;
+    return this._assets;
   }
 }

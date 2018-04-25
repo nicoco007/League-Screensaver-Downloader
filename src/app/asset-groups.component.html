@@ -18,6 +18,7 @@
           <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{collection.cover.thumbnailUrl}}">
           <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
             <source src="https://screensaver.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/webm">
+            <source src="https://screensaver.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
           </video>
         </ng-container>
         <div class="footer">
@@ -33,15 +34,15 @@
     </div>
   </div>
 
-  <div class="asset-group-types" *ngIf="selectedTab.type === 'assetGroup'">
+  <div class="asset-group-types" *ngIf="selectedTab.type === 'assetGroupType'">
     <div class="row tab-navigation align-items-center">
       <div class="col-md-12 col-lg-4 col-xl-3 left">
         <div ngbDropdown class="d-block">
-          <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} (0)</button>
+          <button ngbDropdownToggle class="btn btn-default btn-default-border btn-block">{{selectedType ? dataService.translate(selectedType['nameTranslateId']) : 'All Content'}} ({{selectedGroupType.type(selectedType).size()}})</button>
           <div ngbDropdownMenu class="w-100">
-            <button class="dropdown-item" (click)="selectedType = null">All Content (0)</button>
+            <button class="dropdown-item" (click)="selectedType = null">All Content ({{selectedGroupType.size()}})</button>
             <ng-container *ngFor="let type of assetTypes">
-              <button class="dropdown-item" (click)="selectedType = type">{{dataService.translate(type.nameTranslateId)}} (0)</button>
+              <button *ngIf="selectedGroupType.type(type).size() > 0" class="dropdown-item" (click)="selectedType = type">{{dataService.translate(type.nameTranslateId)}} ({{selectedGroupType.type(type).size()}})</button>
             </ng-container>
           </div>
         </div>
@@ -51,7 +52,7 @@
     <div class="clearfix"></div>
     <div class="asset-groups">
       <ng-container *ngFor="let group of assetGroups | tag: selectedTab.id | translationsort">
-        <div *ngIf="group.assets.type(selectedType).toArray().length" class="asset-group" (click)="showAssetGroup(modal, group)">
+        <div *ngIf="group.assets.type(selectedType).size() > 0" class="asset-group" (click)="showAssetGroup(modal, group)">
           <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group.previewThumbnailUrl}}">
           <div class="footer">
             <div class="inner">{{dataService.translate(group.nameTranslateId)}}</div>
@@ -59,7 +60,7 @@
           <div class="overlay">
             <div class="overlay-inner"><span class="align-self-center">{{dataService.translate(group.nameTranslateId)}}</span></div>
             <div class="overlay-footer">
-              <div class="overlay-footer-inner">View All<br/>({{group.assets.type(selectedType).toArray().length}})</div>
+              <div class="overlay-footer-inner">View All<br/>({{group.assets.type(selectedType).size()}})</div>
             </div>
           </div>
         </div>
@@ -85,7 +86,8 @@
                 <ng-container [ngSwitch]="asset.type">
                   <img class="background" *ngSwitchDefault src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailUrl}}"/>
                   <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
-                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/mp4">
+                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/webm">
+                    <source src="https://screensaver.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
                   </video>
                 </ng-container>
                 <div class="overlay">
