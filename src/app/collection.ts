@@ -9,6 +9,6 @@ export class Collection implements Translatable {
     public cover: Asset,
     public categories: string[],
     public tags: string[],
-    public assets: AssetCollection,
-    public featured: boolean) { }
+    public assets: AssetCollection
+  ) { }
 }

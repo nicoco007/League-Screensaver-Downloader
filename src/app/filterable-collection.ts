@@ -5,4 +5,5 @@ export interface FilterableCollection {
   size(): number;
   toArray(): Asset[];
   type(type: AssetType): FilterableCollection;
+  tag(tag: string): FilterableCollection;
 }

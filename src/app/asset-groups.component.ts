@@ -58,11 +58,7 @@ export class AssetGroupsComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.loadData().then(data => {
       if (data) {
-        try {
-          this.loadData(data);
-        } catch (ex) {
-          console.log(ex);
-        }
+        this.loadData(data);
       }
     });
   }
@@ -177,24 +173,41 @@ export class AssetGroupsComponent implements OnInit {
   }
 
   private loadCollections(data) {
-    for (const collection of data['collections']['collections']) {
+    for (const obj of data['collections']['collections']) {
       const collectionAssets = new AssetCollection();
 
-      if (collection['tags']) {
-        for (const tag of collection['tags']) {
-          const assets = this._assetsByTag.get(tag);
-          collectionAssets.concat(assets);
+      if (obj['assets']) {
+        for (const asset of obj['assets']) {
+          collectionAssets.add(this._assets.get(asset));
         }
       }
 
-      this._collections.set(collection['id'], new Collection(
-        collection['id'],
-        collection['nameTranslateId'],
-        this._assets.get(collection['coverAssetId']),
-        collection['categories'],
-        collection['tags'],
-        collectionAssets,
-        false
+      if (obj['categories']) {
+
+        for (const categoryId of obj['categories']) {
+          const category = this._assetGroupTypes.get(categoryId);
+
+          if (obj['tags']) {
+            for (const tag of obj['tags']) {
+              collectionAssets.concat(category.assetGroups.tag(tag).toArray());
+            }
+          } else {
+            collectionAssets.concat(category.assetGroups.toArray());
+          }
+        }
+      } else if (obj['tags']) {
+        for (const tag of obj['tags']) {
+          collectionAssets.concat(this._assetsByTag.get(tag));
+        }
+      }
+
+      this._collections.set(obj['id'], new Collection(
+        obj['id'],
+        obj['nameTranslateId'],
+        this._assets.get(obj['coverAssetId']),
+        obj['categories'],
+        obj['tags'],
+        collectionAssets
       ));
     }
   }

@@ -23,21 +23,29 @@ export class AssetCollection implements FilterableCollection {
       return this;
     }
 
-    if (this._cache.has(type.id)) {
-      return this._cache.get(type.id);
+    return this.tag(type.id);
+  }
+
+  public tag(tag: string): AssetCollection {
+    if (!tag) {
+      return this;
+    }
+
+    if (this._cache.has(tag)) {
+      return this._cache.get(tag);
     }
 
     const assets = [];
 
     for (const asset of this._assets) {
-      if (asset.tags.indexOf(type.id) !== -1) {
+      if (asset.tags.indexOf(tag) !== -1) {
         assets.push(asset);
       }
     }
 
     const assetCollection = new AssetCollection(assets);
 
-    this._cache.set(type.id, assetCollection);
+    this._cache.set(tag, assetCollection);
 
     return assetCollection;
   }
