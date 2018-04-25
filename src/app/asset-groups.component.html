@@ -51,7 +51,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="asset-groups">
-      <ng-container *ngFor="let group of assetGroups | tag: selectedTab.id | translationsort">
+      <ng-container *ngFor="let group of assetGroups | tag: selectedTab.id | translationSort">
         <div *ngIf="group.assets.type(selectedType).size() > 0" class="asset-group" (click)="showAssetGroup(modal, group)">
           <img class="background" src="https://screensaver.riotgames.com/v2/latest/content/{{group.previewThumbnailUrl}}">
           <div class="footer">
