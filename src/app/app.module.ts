@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -14,12 +13,13 @@ import {TagFilterPipe} from './tag-filter.pipe';
 import {IdFilterPipe} from './id-filter.pipe';
 import {TranslationSortPipe} from './translation-sort.pipe';
 import {OnCreateDirective} from './on-create.directive';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     NgbModule.forRoot()
   ],
   declarations: [

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, ResponseContentType} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 
 import 'rxjs/add/operator/toPromise';
@@ -9,26 +9,25 @@ export class DataService {
   private data: Object;
   private locale = 'en_US';
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
   download(assetPath): void {
     const blah = assetPath.split('/');
     const assetName = blah[blah.length - 1];
 
-    this.http.get('https://screensaver.riotgames.com/v2/latest/content/' + assetPath, {responseType: ResponseContentType.Blob}).toPromise()
+    this.http.get('https://screensaver.riotgames.com/v2/latest/content/' + assetPath, {responseType: 'blob'}).toPromise()
       .then(response => {
-        FileSaver.saveAs(new Blob([response.blob()]), assetName, true);
+        FileSaver.saveAs(new Blob([response]), assetName, true);
       }).catch(reason => {
         // TODO: modal
       });
   }
 
   loadData(): Promise<void | Object> {
-    // return this.http.get('https://content.nicoco007.com/lolwd/data.php')
-    return this.http.get('https://screensaver.riotgames.com/v2/latest/content/data.json')
+    return this.http.get('https://nicoco007.com/screensaver/data.php')
       .toPromise()
       .then(response => {
-        this.data = response.json();
+        this.data = response;
         return Promise.resolve(this.data);
       }).catch(reason => {
         // TODO: modal
