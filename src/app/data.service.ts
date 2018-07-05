@@ -11,20 +11,8 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  download(assetPath): void {
-    const blah = assetPath.split('/');
-    const assetName = blah[blah.length - 1];
-
-    this.http.get('https://screensaver.riotgames.com/v2/latest/content/' + assetPath, {responseType: 'blob'}).toPromise()
-      .then(response => {
-        FileSaver.saveAs(new Blob([response]), assetName, true);
-      }).catch(reason => {
-        // TODO: modal
-      });
-  }
-
   loadData(): Promise<void | Object> {
-    return this.http.get('https://nicoco007.com/screensaver/data.php')
+    return this.http.get('https://nicoco007.com/screensaver/proxy.php?path=v2/latest/content/data.json')
       .toPromise()
       .then(response => {
         this.data = response;

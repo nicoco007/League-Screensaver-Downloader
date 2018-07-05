@@ -262,8 +262,4 @@ export class AssetGroupsComponent implements OnInit {
 
     return Math.max(size, 0.1).toFixed(1) + ' ' + byteUnits[i];
   }
-
-  download(asset) {
-    this.dataService.download(asset['videoUrl'] ? asset['videoUrl'] : asset['url']);
-  }
 }
