@@ -15,10 +15,10 @@
     <div class="collections-content">
       <div *ngFor="let collection of collections" class="collection" title="{{dataService.translate(collection.nameTranslateId)}}" (click)="showCollection(modal, collection)">
         <ng-container [ngSwitch]="collection.cover.type">
-          <img class="background" *ngSwitchDefault src="https://screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailUrl}}">
+          <img class="background" *ngSwitchDefault src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailUrl}}">
           <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
-            <source src="https://screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/webm">
-            <source src="https://screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
+            <source src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/webm">
+            <source src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{collection.cover.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
           </video>
         </ng-container>
         <div class="footer">
@@ -53,7 +53,7 @@
     <div class="asset-groups">
       <ng-container *ngFor="let group of assetGroups | tag: selectedTab.id | translationSort">
         <div *ngIf="group.assets.type(selectedType).size() > 0" class="asset-group" (click)="showAssetGroup(modal, group)">
-          <img class="background" src="https://screensavers.riotgames.com/v2/latest/content/{{group.previewThumbnailUrl}}">
+          <img class="background" src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{group.previewThumbnailUrl}}">
           <div class="footer">
             <div class="inner">{{dataService.translate(group.nameTranslateId)}}</div>
           </div>
@@ -84,10 +84,10 @@
             <div class="assets">
               <div *ngFor="let asset of selectedAssets | tag: (selectedType ? selectedType.id : null);" class="asset align-self-center">
                 <ng-container [ngSwitch]="asset.type">
-                  <img class="background" *ngSwitchDefault src="https://screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailUrl}}"/>
+                  <img class="background" *ngSwitchDefault src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailUrl}}"/>
                   <video class="background" *ngSwitchCase="'video/webm'" autoplay loop>
-                    <source src="https://screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/webm">
-                    <source src="https://screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
+                    <source src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/webm">
+                    <source src="https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/{{asset.thumbnailVideoUrl}}" type="video/mp4"> <!-- Edge doesn't recognize WebM for some reason -->
                   </video>
                 </ng-container>
                 <div class="overlay">
