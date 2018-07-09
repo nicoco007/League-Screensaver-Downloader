@@ -17,7 +17,7 @@ $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 header("Access-Control-Allow-Origin: *");
 
-if ($response_code === 200 && $_GET["download"] === "true")
+if ($response_code === 200 && isset($_GET["download"]) && $_GET["download"] === "true")
   header(sprintf('Content-Disposition: attachment; filename="%s"', $filename));
 
 foreach (explode("\r\n", $header) as $i => $line)
