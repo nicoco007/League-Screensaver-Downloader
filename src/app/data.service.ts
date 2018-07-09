@@ -9,7 +9,7 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   loadData(): Promise<void | Object> {
-    return this.http.get('https://nicoco007.com/screensaver/proxy.php?path=v2/latest/content/data.json')
+    return this.http.get('https://nicoco007.com/screensaver/screensavers.riotgames.com/v2/latest/content/data.json')
       .toPromise()
       .then(response => {
         this.data = response;
