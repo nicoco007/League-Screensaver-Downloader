@@ -50,6 +50,10 @@ export class AssetGroupCollection implements FilterableCollection {
     const assets = [];
 
     for (const asset of this._assets) {
+      if (!asset) {
+        continue;
+      }
+
       if (asset.tags.indexOf(tag) !== -1) {
         assets.push(asset);
       }
